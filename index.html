@@ -3,228 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIMBOT</title>
-
-    <!-- Google Fonts -->
+    <title>RG G4NG 414</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Poppins:wght@400;600&family=Roboto:wght@500&display=swap" rel="stylesheet">
-
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden;
             text-align: center;
             height: 100vh;
-            background-color: white;
-            color: #333;
+            background-color: #111;
+            color: white;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
+        .login-container {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .login-container input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .login-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .login-container button:hover {
+            background-color: darkred;
+        }
+
         .title {
             font-family: 'Lora', serif;
             font-size: 4em;
-            color: black;
             margin-top: 20px;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
-            display: inline-block;
+            text-shadow: 2px 2px 8px rgba(255, 0, 0, 0.8);
         }
 
         .subtitle {
             font-family: 'Poppins', sans-serif;
-            font-size: 2.2em;
-            color: black;
+            font-size: 2em;
             margin-top: 5px;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-            display: inline-block;
+            text-shadow: 2px 2px 6px rgba(255, 255, 0, 0.7);
         }
 
         .mod-menu-container {
-            display: block;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
+            background-color: rgba(255, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
             margin: auto;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            position: relative;
-            z-index: 2;
-            margin-top: 20px;
-        }
-
-        .mod-menu-container h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .mod-menu-container label {
-            font-size: 1.1em;
-            color: #d3d3d3;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
 
         .toggle-switch {
             display: inline-block;
-            width: 60px;
+            width: 70px;
             height: 30px;
-            background-color: #ccc;
+            background-color: #555;
             border-radius: 30px;
             position: relative;
             cursor: pointer;
         }
 
-        .toggle-switch span {
-            position: absolute;
-            top: 50%;
-            left: 5px;
-            width: 25px;
-            height: 25px;
-            background-color: #fff;
-            border-radius: 50%;
-            transform: translateY(-50%);
-            transition: left 0.3s;
+        .toggle-switch.active {
+            background-color: lime;
         }
 
-        .toggle-switch.active {
-            background-color: #00bfff;
+        .toggle-switch span {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease-in-out;
         }
 
         .toggle-switch.active span {
-            left: 30px;
+            left: 45px;
         }
 
         .footer {
             font-size: 1em;
-            color: black;
-            margin-bottom: 10px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
     </style>
-
     <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === "TOP" && password === "1") {
+                alert("Login successful!");
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('login-section').style.display = 'none';
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+
         const aimbot = {
             enabled: false,
-            aimlock: true,
-            aimAssist: true,
-            headTracking: true,
-            noRecoil: true,
-            aimFOV: true,
-            headshotOnly: true,
+            hyperPrecision: true,
             autoAim: true,
-            autoShoot: true // Nuevo: disparo automático al fijar un objetivo
+            autoShoot: true,
+            noRecoil: true,
+            targetOnlyHead: true,
+            instantKill: true
         };
 
-        let lastKnownHeadPosition = { x: 0, y: 0 };
-
-        // Toggle del aimbot
         function toggleAimbot() {
             aimbot.enabled = !aimbot.enabled;
             const toggleSwitch = document.getElementById('aimbot-toggle');
             if (aimbot.enabled) {
                 toggleSwitch.classList.add('active');
-                injectAimbot();
+                activateAimbot();
             } else {
                 toggleSwitch.classList.remove('active');
-                injectNoAimbot();
+                deactivateAimbot();
             }
         }
 
-        // Activar el aimbot
+        function activateAimbot() {
+            console.log("Aimbot activated with maximum settings");
+            injectAimbot();
+        }
+
+        function deactivateAimbot() {
+            console.log("Aimbot deactivated");
+            injectNoAimbot();
+        }
+
         function injectAimbot() {
-            const { aimlock, aimAssist, headTracking, noRecoil, aimFOV, headshotOnly, autoAim, autoShoot } = aimbot;
-            const injectURL = `freefire://injectAimbot?bundle=com.dts.freefireth&aimlock=true&aimAssist=true&headTracking=true&noRecoil=true&aimFov=true&headshotOnly=true&autoAim=true&autoShoot=true`;
-            window.location.href = injectURL; // Simulación de la inyección en Free Fire
-            
-            console.log("Injected extreme aimbot with advanced auto-aim settings: ", aimbot);
-            startAimbotLogic(); // Inicia la lógica avanzada del aimbot
+            const injectionURL = `freefire://injectAimbot?bundle=com.dts.freefireth&aimlock=true&autoAim=true&autoShoot=true&noRecoil=true&headshotOnly=true&instantKill=true`;
+            window.location.href = injectionURL; // Direct injection
+            console.log("Injected to Free Fire with extreme settings");
         }
 
-        // Desactivar el aimbot
         function injectNoAimbot() {
-            const injectURL = 'freefire://disableAimbot?bundle=com.dts.freefireth';
-            window.location.href = injectURL;
-            console.log("Aimbot disabled.");
-        }
-
-        // Lógica avanzada del aimbot
-        function startAimbotLogic() {
-            setInterval(() => {
-                if (aimbot.enabled) {
-                    autoAimAndShoot(); // Llamar a la función de auto-apuntado y disparo automático
-                }
-            }, 10); // Actualización cada 10ms para máxima precisión
-        }
-
-        // Auto-apuntado y disparo automático
-        function autoAimAndShoot() {
-            // Simulación de detección del objetivo más cercano
-            const enemyPositions = simulateEnemyDetection();
-            if (enemyPositions.length > 0) {
-                const nearestEnemy = getNearestEnemy(enemyPositions);
-                lockOntoTarget(nearestEnemy);
-                if (aimbot.autoShoot) {
-                    simulateAutoShoot(nearestEnemy);
-                }
-            }
-        }
-
-        // Simulación de detección de enemigos
-        function simulateEnemyDetection() {
-            // Devuelve una lista de enemigos detectados (coordenadas aleatorias para la simulación)
-            return [
-                { x: Math.random() * 800, y: Math.random() * 600 },
-                { x: Math.random() * 800, y: Math.random() * 600 }
-            ];
-        }
-
-        // Obtener el enemigo más cercano basado en la posición
-        function getNearestEnemy(enemies) {
-            return enemies.reduce((nearest, current) => {
-                const nearestDistance = Math.sqrt(nearest.x ** 2 + nearest.y ** 2);
-                const currentDistance = Math.sqrt(current.x ** 2 + current.y ** 2);
-                return currentDistance < nearestDistance ? current : nearest;
-            });
-        }
-
-        // Apuntar al objetivo
-        function lockOntoTarget(position) {
-            console.log('Aimbot: Locking onto enemy at', position);
-            updateCrosshairPosition(position); // Ajustar el punto de mira
-        }
-
-        // Disparo automático
-        function simulateAutoShoot(position) {
-            console.log('Aimbot: Auto-shooting at', position);
-            // Aquí se debería llamar a la API de disparo del juego
-        }
-
-        // Actualizar el punto de mira
-        function updateCrosshairPosition(position) {
-            console.log('Aimbot: Crosshair updated to', position);
-            // Aquí se ajustaría el punto de mira en el juego
+            const injectionURL = `freefire://disableAimbot?bundle=com.dts.freefireth`;
+            window.location.href = injectionURL; // Disable aimbot in Free Fire
+            console.log("Injection disabled");
         }
     </script>
 </head>
 <body>
-    <div class="title">AIMBOT</div>
-    <div class="subtitle">Free Version</div>
-
-    <div class="mod-menu-container">
-        <h3>Aimbot Settings</h3>
-        <label>
-            Enable Aimbot:
-            <div class="toggle-switch" id="aimbot-toggle" onclick="toggleAimbot()">
-                <span></span>
-            </div>
-        </label>
+    <!-- Login Form -->
+    <div id="login-section" class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
     </div>
 
-    <div class="footer">AIMBOT | Developed by @iOSrazielOFC</div>
+    <!-- Main Content -->
+    <div id="main-content" style="display: none;">
+        <div class="title">RG G4NG 414</div>
+        <div class="subtitle">AIMBOT EXTREMO</div>
+        <div class="mod-menu-container">
+            <h3>Aimbot Settings</h3>
+            <label>
+                Enable Aimbot:
+                <div class="toggle-switch" id="aimbot-toggle" onclick="toggleAimbot()">
+                    <span></span>
+                </div>
+            </label>
+        </div>
+        <div class="footer">AIMBOT | Powered by RG Dev Team</div>
+    </div>
 </body>
 </html>
